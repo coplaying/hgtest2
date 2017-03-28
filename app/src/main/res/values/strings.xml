@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">hgtest2</string>
+    <string name="app_name">MyMemo</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_new_content">NewContent</string>
+    <string name="title_activity_new_content">New Memo</string>
+    <string name="memo_hint">Write it here</string>
+    <string name="submit">SAVE</string>
 </resources>

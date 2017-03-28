@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,10 +28,18 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
                 */
                 Intent intent = new Intent(MainActivity.this, NewContentActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,0);
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == 0){
+            String content = data.getStringExtra("memo_content");
+            Toast.makeText(MainActivity.this, content, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
