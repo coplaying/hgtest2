@@ -13,8 +13,9 @@
     <EditText
         android:id="@+id/memo_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/memo_hint" />
+        android:layout_height="match_parent"
+        android:hint="@string/memo_hint"
+        android:gravity="top|start" />
 
 
 
