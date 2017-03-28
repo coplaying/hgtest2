@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(resultCode == 0){
+        if(resultCode == 1){
             String content = data.getStringExtra("memo_content");
             Toast.makeText(MainActivity.this, content, Toast.LENGTH_LONG).show();
         }

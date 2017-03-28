@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class NewContentActivity extends AppCompatActivity {
 
@@ -33,9 +34,13 @@ public class NewContentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent data = new Intent();
                 EditText memo_content = (EditText) findViewById(R.id.memo_content);
-                data.putExtra("memo_content", memo_content.getText().toString());
-                setResult(0,data);
-                finish();
+                if(memo_content.getText().toString().length() == 0){
+                    Toast.makeText(NewContentActivity.this,"Nothing to save",Toast.LENGTH_SHORT).show();
+                }else{
+                    data.putExtra("memo_content", memo_content.getText().toString());
+                    setResult(1,data);
+                    finish();
+                }
             }
         });
     }
