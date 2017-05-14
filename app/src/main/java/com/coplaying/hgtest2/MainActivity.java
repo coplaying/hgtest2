@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         //test data set
         myDataSet.add(new MyData("First memo"));
         myDataSet.add(new MyData("Second memo"));
+        myDataSet.add(new MyData("Thrid memo"));
 
         FloatingActionButton add = (FloatingActionButton) findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
