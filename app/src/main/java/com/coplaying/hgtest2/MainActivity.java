@@ -15,13 +15,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView memoList;
+    private RecyclerView memoListRecyclerView;
     private MemoAdapter memoAdapter;
     private RecyclerView.LayoutManager memoLayoutManager;
-    String[] dataSet;
-    int dataSetindex;
+    private ArrayList<MyData> myDataSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +31,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        dataSet = new String[10];
-        dataSet[0] = "Initial contents1";
-        dataSet[1] = "Initial contents2";
-        dataSetindex = 1;
+        memoListRecyclerView = (RecyclerView) findViewById(R.id.memo_list);
 
-        memoList = (RecyclerView) findViewById(R.id.memo_list);
+        //set up layout manager: linear
         memoLayoutManager = new LinearLayoutManager(this);
-        memoList.setLayoutManager(memoLayoutManager);
-        memoAdapter = new MemoAdapter(dataSet);
-        memoList.setAdapter(memoAdapter);
+        memoListRecyclerView.setLayoutManager(memoLayoutManager);
+
+        //set up adapter
+        myDataSet = new ArrayList<>();
+        memoAdapter = new MemoAdapter(myDataSet);
+        memoListRecyclerView.setAdapter(memoAdapter);
+
+        //test data set
+        myDataSet.add(new MyData("First memo"));
+        myDataSet.add(new MyData("Second memo"));
 
         FloatingActionButton add = (FloatingActionButton) findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
@@ -60,9 +65,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == 1){
             String content = data.getStringExtra("memo_content");
-            dataSetindex++;
-            dataSet[dataSetindex] = content;
-            memoAdapter.swapData(dataSet);
+            myDataSet.add(new MyData(content));
+            memoAdapter.swapData(myDataSet);
             memoAdapter.notifyDataSetChanged();
             Toast.makeText(MainActivity.this, content, Toast.LENGTH_LONG).show();
         }
@@ -89,43 +93,51 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+}
 
-    public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder> {
-        private String[] memoSet;
+class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder> {
+    private ArrayList<MyData> memoSet;
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-            public TextView memoText;
+        public TextView memoText;
 
-            public ViewHolder(View itemView) {
-                super(itemView);
-                memoText = (TextView) itemView.findViewById(R.id.memo_text);
-            }
-        }
-
-        public MemoAdapter(String[] dataSet){
-            memoSet = dataSet;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.memo_text_view, parent, false);
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.memoText.setText(memoSet[position]);
-        }
-
-        @Override
-        public int getItemCount() {
-            return memoSet.length;
-        }
-
-        public void swapData(String[] dataSet) {
-            memoSet = dataSet;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            memoText = (TextView) itemView.findViewById(R.id.memo_text);
         }
     }
+
+    public MemoAdapter(ArrayList<MyData> dataSet){
+        memoSet = dataSet;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.memo_text_view, parent, false);
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.memoText.setText(memoSet.get(position).text);
+    }
+
+    @Override
+    public int getItemCount() {
+        return memoSet.size();
+    }
+
+    public void swapData(ArrayList<MyData> dataSet) {
+        memoSet = dataSet;
+    }
 }
+
+class MyData{
+    public String text;
+    public MyData(String text){
+        this.text = text;
+    }
+}
+
