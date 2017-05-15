@@ -1,6 +1,10 @@
 package com.coplaying.hgtest2;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +35,17 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //DB setting
+        MemoDbHelper memoDBHelper = new MemoDbHelper(this,MemoDbContract.MemoDb.DB_NAME,null,1);
+        SQLiteDatabase memoDB = memoDBHelper.getWritableDatabase();
+        ContentValues initValue1 = new ContentValues();
+        initValue1.put(MemoDbContract.MemoDb.TITLE,"first memo title");
+        initValue1.put(MemoDbContract.MemoDb.CONTENT,"first memo content");
+        ContentValues initValue2 = new ContentValues();
+        initValue2.put(MemoDbContract.MemoDb.TITLE,"second memo title");
+        initValue2.put(MemoDbContract.MemoDb.CONTENT,"second memo content");
+
+        //view setting
         memoListRecyclerView = (RecyclerView) findViewById(R.id.memo_list);
 
         //set up layout manager: linear
