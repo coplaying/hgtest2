@@ -3,6 +3,7 @@ package com.coplaying.hgtest2;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
@@ -37,13 +38,20 @@ public class MainActivity extends AppCompatActivity {
 
         //DB setting
         MemoDbHelper memoDBHelper = new MemoDbHelper(this,MemoDbContract.MemoDb.DB_NAME,null,1);
-        SQLiteDatabase memoDB = memoDBHelper.getWritableDatabase();
-        ContentValues initValue1 = new ContentValues();
-        initValue1.put(MemoDbContract.MemoDb.TITLE,"first memo title");
-        initValue1.put(MemoDbContract.MemoDb.CONTENT,"first memo content");
+        SQLiteDatabase memoDB = memoDBHelper.getReadableDatabase();
+
+        String[] projection = {
+                MemoDbContract.MemoDb._ID,
+                MemoDbContract.MemoDb.TITLE,
+                MemoDbContract.MemoDb.CONTENT
+        };
+        Cursor cursor = memoDB.query(MemoDbContract.MemoDb.TABLE_NAME,projection,null,null,null,null,null);
+        cursor.moveToFirst();
+        /*
         ContentValues initValue2 = new ContentValues();
         initValue2.put(MemoDbContract.MemoDb.TITLE,"second memo title");
         initValue2.put(MemoDbContract.MemoDb.CONTENT,"second memo content");
+        */
 
         //view setting
         memoListRecyclerView = (RecyclerView) findViewById(R.id.memo_list);
@@ -81,6 +89,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == 1){
             String content = data.getStringExtra("memo_content");
+            //DB setting
+            MemoDbHelper memoDBHelper = new MemoDbHelper(this,MemoDbContract.MemoDb.DB_NAME,null,1);
+            SQLiteDatabase memoDB = memoDBHelper.getWritableDatabase();
+
+            ContentValues contentToDb = new ContentValues();
+            contentToDb.put(MemoDbContract.MemoDb.TITLE,"first memo title");
+            contentToDb.put(MemoDbContract.MemoDb.CONTENT,"first memo content");
+            memoDB.insert(MemoDbContract.MemoDb.TABLE_NAME,null,contentToDb);
+
             myDataSet.add(new MyData(content));
             memoAdapter.swapData(myDataSet);
             memoAdapter.notifyDataSetChanged();
