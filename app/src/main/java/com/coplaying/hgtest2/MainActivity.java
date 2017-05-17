@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private MemoAdapter memoAdapter;
     private RecyclerView.LayoutManager memoLayoutManager;
     private ArrayList<MyData> myDataSet;
+    private ArrayList<Note> noteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //DB setting
+        NoteDbHelper noteDbHelper = new NoteDbHelper(this);
+        noteDbHelper.addNote(new Note("TEXT1"));
+        noteDbHelper.addNote(new Note("TEST2"));
+        noteList = noteDbHelper.getNotes();
+
+
+        /*DB setting
         MemoDbHelper memoDBHelper = new MemoDbHelper(this,MemoDbContract.MemoDb.DB_NAME,null,1);
         SQLiteDatabase memoDB = memoDBHelper.getReadableDatabase();
 
@@ -47,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         };
         Cursor cursor = memoDB.query(MemoDbContract.MemoDb.TABLE_NAME,projection,null,null,null,null,null);
         cursor.moveToFirst();
+        */
         /*
         ContentValues initValue2 = new ContentValues();
         initValue2.put(MemoDbContract.MemoDb.TITLE,"second memo title");
@@ -66,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         memoListRecyclerView.setAdapter(memoAdapter);
 
         //test data set
+        for(Note note : noteList){
+            myDataSet.add(new MyData(note.getNoteText()));
+        }
         myDataSet.add(new MyData("First memo"));
         myDataSet.add(new MyData("Second memo"));
         myDataSet.add(new MyData("Thrid memo"));
@@ -89,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == 1){
             String content = data.getStringExtra("memo_content");
-            //DB setting
+            /*DB setting
             MemoDbHelper memoDBHelper = new MemoDbHelper(this,MemoDbContract.MemoDb.DB_NAME,null,1);
             SQLiteDatabase memoDB = memoDBHelper.getWritableDatabase();
 
@@ -97,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             contentToDb.put(MemoDbContract.MemoDb.TITLE,"first memo title");
             contentToDb.put(MemoDbContract.MemoDb.CONTENT,"first memo content");
             memoDB.insert(MemoDbContract.MemoDb.TABLE_NAME,null,contentToDb);
+            */
 
             myDataSet.add(new MyData(content));
             memoAdapter.swapData(myDataSet);
