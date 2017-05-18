@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -118,11 +119,13 @@ class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView memoText;
+        public TextView noteTextView;
+        public CardView noteCardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            memoText = (TextView) itemView.findViewById(R.id.memo_text);
+            noteTextView = (TextView) itemView.findViewById(R.id.memo_text);
+            noteCardView = (CardView) itemView.findViewById(R.id.note_card);
         }
     }
 
@@ -139,7 +142,14 @@ class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.memoText.setText(noteList.get(position).getNoteText());
+        holder.noteTextView.setText(noteList.get(position).getNoteText());
+        holder.noteCardView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Clicked!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
